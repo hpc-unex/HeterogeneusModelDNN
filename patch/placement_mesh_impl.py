@@ -385,7 +385,8 @@ class PlacementMeshImpl(mtf.MeshImpl):
     def my_fn(pnum):
       # seeds are necessary to make sure that slices that should have the
       # same values actually do have the same values.
-      seed = hash("%s,%s" % (op_seed, self.slice_begin(shape, pnum)))
+      #seed = hash("%s,%s" % (op_seed, self.slice_begin(shape, pnum)))
+       seed = 1
       return tf_fn(slice_shape, seed=seed, **kwargs)
     return self.slicewise(my_fn, self.laid_out_pnum())
 
