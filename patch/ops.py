@@ -1035,16 +1035,17 @@ class MeshImpl(object):
 #    flag_filters=3 if str(self.tensor_layout(tensor_shape)) != "TensorLayout(None, None, None, 0)" else -1
     conv = []
     flag_filters=0
-    conv_f = fil[block]
-
-    index = []
-    for i in range(0,len(self.tensor_layout(tensor_shape))):
-      if self.tensor_layout(tensor_shape)[i] != None:
-        index.append(self.tensor_layout(tensor_shape)[i])
-    index_0 = index[0]
-    index_1 = index[1] if len(index)>1 else None
-    tensor = int(tensor_shape[-2].size)
-
+    if block != None:
+      conv_f = fil[block]
+      index = []
+      for i in range(0,len(self.tensor_layout(tensor_shape))):
+        if self.tensor_layout(tensor_shape)[i] != None:
+          index.append(self.tensor_layout(tensor_shape)[i])
+      index_0 = index[0]
+      index_1 = index[1] if len(index)>1 else None
+      tensor = int(tensor_shape[-2].size)
+    else:
+      index_0=index_1=None
     if index_0 != None and int(shape[-2])-tensor!=0:
       if pnum==0 or tensor_shape[-1].name == 'hidden1':
         conv.append(0)
@@ -1055,9 +1056,10 @@ class MeshImpl(object):
         self._acum+=int(shape[-2])
     else:
       conv.append(0)
-
-    if int(shape[-2])-tensor==0 and int(shape[-1])-int(tensor_shape[-1].size):
-      flag_filters=3
+      
+    if index_0 != None: 
+      if int(shape[-2])-tensor==0 and int(shape[-1])-int(tensor_shape[-1].size):
+        flag_filters=3
 
     conv2 = []
 
